@@ -1,14 +1,14 @@
 import type {GetServerSideProps, NextPage} from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import {AppSession, getSession} from "../lib/utils/get-session";
-import {authorizeURL} from "../lib/utils/spotify";
 import ConnectSpotifyButton from "../components/ConnectSpotifyButton";
 import RandomTopTrack from "../components/RandomTopTrack";
+import { withSessionSsr } from "../lib/withSession";
+import {authorizeURL} from "../lib/utils/spotify";
 
-type Props = AppSession & {authorizeURL: string}
+type Props = { accessToken?: string | null } & {authorizeURL: string}
 
-const Home: NextPage<Props> = ({accessToken,authorizeURL}) => {
+const Home: NextPage<Props> = ({accessToken, authorizeURL}) => {
     return (
         <div className={styles.container}>
             <Head>
@@ -18,10 +18,10 @@ const Home: NextPage<Props> = ({accessToken,authorizeURL}) => {
             </Head>
 
             <main className={styles.main}>
-                {!accessToken ?
-                    <RandomTopTrack />
+                {accessToken ?
+                    <RandomTopTrack/>
                     :
-                    <ConnectSpotifyButton authorizeURL={authorizeURL} />
+                    <ConnectSpotifyButton authorizeURL={authorizeURL}/>
                 }
             </main>
 
@@ -32,14 +32,15 @@ const Home: NextPage<Props> = ({accessToken,authorizeURL}) => {
     )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
-    const session = await getSession(req, res)
-    return {
-        props: {
-            accessToken: session.accessToken || null,
-            authorizeURL,
-        }
+export const getServerSideProps: GetServerSideProps = withSessionSsr(
+    async  ({req}) => {
+        return {
+            props: {
+                accessToken: req.session.accessToken || null,
+                authorizeURL
+            },
+        };
     }
-}
+)
 
 export default Home
