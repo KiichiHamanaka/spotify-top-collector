@@ -1,21 +1,31 @@
 import React from "react";
+import axios from "axios";
+import { useRouter } from 'next/router'
 
-const ConnectSpotifyButton: React.FC = () => {
+const RegisterFavoriteButton: React.FC = () => {
+    const router = useRouter()
 
-    const registration = () => {
+    const handleRegistration = () => {
         try {
-            // axios post
-            // redirect
-        }catch (e) {
-
+            axios.put('/api/regist')
+                .then(res => {
+                    console.log(res)
+                    router.reload()
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+            console.log("finish")
+        }catch (error) {
+            console.log(error);
         }
     }
 
     return (
-        <button onClick={registration}>
+        <button onClick={handleRegistration}>
             再登録
         </button>
     );
 };
 
-export default ConnectSpotifyButton;
+export default RegisterFavoriteButton;
