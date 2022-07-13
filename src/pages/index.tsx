@@ -5,6 +5,7 @@ import ConnectSpotifyButton from "../components/ConnectSpotifyButton";
 import RandomTopTrack from "../components/RandomTopTrack";
 import { withSessionSsr } from "../lib/withSession";
 import {authorizeURL} from "../lib/utils/spotify";
+import RegisterFavoriteButton from "../components/RegisterFavoriteButton";
 
 type Props = { accessToken?: string | null } & {authorizeURL: string}
 
@@ -19,7 +20,10 @@ const Home: NextPage<Props> = ({accessToken, authorizeURL}) => {
 
             <main className={styles.main}>
                 {accessToken ?
-                    <RandomTopTrack/>
+                     (<div>
+                             <RandomTopTrack/>
+                             <RegisterFavoriteButton/>
+                     </div>)
                     :
                     <ConnectSpotifyButton authorizeURL={authorizeURL}/>
                 }
