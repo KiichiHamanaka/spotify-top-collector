@@ -8,12 +8,16 @@ import { css } from '@emotion/react'
 const randomTopTrackTheme = css({
 });
 
+const convertURI = (uri:string) => {
+    const result = uri.replace('spotify','')
+    return result.replaceAll(':',"/")
+}
 const RandomTopTrack = () => {
     const { data } = useSWR(`/api/track/`, fetcher.fetchGet);
     return (
         <GetTrackErrorBoundary>
             <Suspense fallback={<TailSpin ariaLabel="loading-indicator"/>}>
-                {data !== undefined && data.length !== 0 ? <SpotifyEmbed uri={data.uri}/> : (
+                {data !== undefined && data[0].uri !== undefined ? <SpotifyEmbed uri={convertURI(data[0].uri)}/> : (
                     <div css={randomTopTrackTheme}>
                         <div>no data</div>
                         <SpotifyEmbed />
