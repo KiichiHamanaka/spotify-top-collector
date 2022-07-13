@@ -2,7 +2,8 @@ import {HTMLAttributes} from 'react';
 
 interface SpotifyProps extends HTMLAttributes<HTMLIFrameElement> {
     [key: string]: any;
-    uri: string;
+
+    uri?: string;
     wide?: boolean;
     width?: number | string;
     height?: number | string;
